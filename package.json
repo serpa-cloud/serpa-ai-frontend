@@ -2,19 +2,50 @@
   "name": "serpa-ai-frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:7100/_graphql",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "relay": "relay-compiler",
+    "schema": "get-graphql-schema ${npm_package_proxy}/_graphql > schema.graphql"
   },
   "dependencies": {
+    "@lexical/code": "^0.21.0",
+    "@lexical/link": "^0.21.0",
+    "@lexical/list": "^0.21.0",
+    "@lexical/react": "^0.21.0",
+    "@lexical/rich-text": "^0.21.0",
+    "classnames": "^2.5.1",
+    "graphql-ws": "^5.16.0",
+    "lexical": "^0.21.0",
+    "next": "15.1.0",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
-    "next": "15.0.3"
+    "react-relay": "^18.2.0",
+    "react-spring": "^9.7.4",
+    "react-type-animation": "^3.2.0",
+    "server-only": "^0.0.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.25.9",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-flow": "^7.25.9",
+    "@next/eslint-plugin-next": "^15.1.0",
+    "babel-plugin-relay": "^18.2.0",
+    "babel-plugin-syntax-hermes-parser": "^0.25.1",
     "eslint": "^8",
-    "eslint-config-next": "15.0.3"
+    "eslint-config-next": "15.1.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-ft-flow": "^3.0.11",
+    "flow-bin": "^0.255.0",
+    "graphql": "^16.10.0",
+    "hermes-eslint": "^0.25.1",
+    "prettier": "3.4.2",
+    "prettier-eslint": "^16.3.0",
+    "relay-compiler": "^18.2.0",
+    "sass": "^1.81.1"
   }
 }

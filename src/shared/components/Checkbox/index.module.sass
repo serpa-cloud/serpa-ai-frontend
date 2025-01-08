@@ -1,0 +1,29 @@
+.container
+  user-select: none
+
+.checkContainer
+  width: 20px
+  height: 20px
+  border-radius: 4px
+  transition-property: all
+  transition-timing-function: var(--fds-soft)
+  transition-duration: var(--fds-fast)
+  cursor: pointer
+  display: flex
+  justify-content: center
+  align-items: center
+
+.unchecked
+  border: 1px solid var(--border-color)
+  background-color: var(--neutral-color-100)
+
+.checked
+  border: 1px solid var(--primary-color-1)
+  background-color: var(--primary-color-1)
+
+.enabled
+  opacity: 1
+
+.disabled
+  opacity: 0.6
+  pointer-events: none

@@ -1,0 +1,30 @@
+// Spinner.module.sass
+@keyframes spinner-rotation
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(270deg)
+
+@keyframes path-animation
+  0%
+    stroke-dashoffset: 187
+  50%
+    stroke-dashoffset: 46.75
+    transform: rotate(135deg)
+  100%
+    stroke-dashoffset: 187
+    transform: rotate(450deg)
+
+.spinner
+  animation-duration: 1.4s
+  animation-iteration-count: infinite
+  animation-name: spinner-rotation
+
+.path
+  stroke-dasharray: 187
+  stroke-dashoffset: 0
+  transform-origin: center
+  animation-duration: 1.4s
+  animation-iteration-count: infinite
+  animation-timing-function: ease-in-out
+  animation-name: path-animation

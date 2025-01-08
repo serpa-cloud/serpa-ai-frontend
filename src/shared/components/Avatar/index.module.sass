@@ -1,0 +1,22 @@
+.avatar
+  object-fit: cover
+  background-color: var(--neutral-color-400)
+
+.avatarFallback
+  display: flex
+  align-items: center
+  justify-content: center
+
+.circle
+  border-radius: 100%
+
+.rounded
+  border-radius: 0
+
+.shadow
+  box-shadow: var(--shadow-1-color)
+  transition: box-shadow var(--fds-duration-medium-in) var(--fds-animation-fade-in)
+
+  &:hover
+    box-shadow: var(--shadow-2-color)
+    transition: box-shadow var(--fds-duration-medium-out) var(--fds-animation-fade-out)

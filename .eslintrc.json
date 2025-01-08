@@ -1,3 +1,14 @@
 {
-  "extends": "next/core-web-vitals"
+  "root": true,
+  "parser": "hermes-eslint",
+  "plugins": ["ft-flow"],
+  "rules": {
+    "import/no-unresolved": "error"
+  },
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:ft-flow/recommended",
+    "prettier"
+  ]
 }

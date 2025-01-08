@@ -1,0 +1,314 @@
+"""
+Directs the executor to defer this fragment when the `if` argument is true or undefined.
+"""
+directive @defer(
+  """Deferred when true or undefined."""
+  if: Boolean
+
+  """Unique name"""
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"""
+Directs the executor to stream plural fields when the `if` argument is true or undefined.
+"""
+directive @stream(
+  """Stream when true or undefined."""
+  if: Boolean
+
+  """Unique name"""
+  label: String
+
+  """Number of items to return immediately"""
+  initialCount: Int = 0
+) on FIELD
+
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+type AIMessage implements Node {
+  id: ID!
+  conversation: ID!
+  organization: Node
+  createdBy: User!
+  createdAt: Date!
+  createdAtFormatted: String!
+  role: AIRole!
+  content: String!
+}
+
+type AIMessageEdge {
+  cursor: Cursor!
+  id: String!
+  node: AIMessage!
+}
+
+type AIMessagesConnection {
+  edges: [AIMessageEdge]
+  pageInfo: PageInfo
+}
+
+type AIProject implements Node {
+  id: ID!
+  createdBy: User!
+  createdAt: Date!
+  createdAtFormatted: String!
+  name: String
+  key: String!
+  summary: String!
+  summaryState: String!
+  clarifyingAsks: String
+  currentConversation: Chat
+  firstConversation: Chat
+}
+
+type AIProjectTemplate implements Node {
+  id: ID!
+  createdBy: User!
+  createdAt: Date!
+  createdAtFormatted: String!
+  userDescription: String!
+  recommendedFor: [String!]
+}
+
+enum AIRole {
+  user
+  assistant
+}
+
+type Chat implements Node {
+  id: ID!
+  organization: Node
+  createdBy: User!
+  createdAt: Date!
+  createdAtFormatted: String!
+  messages(after: Cursor, before: Cursor, first: Int, last: Int): AIMessagesConnection
+  resume: String
+}
+
+scalar Cursor
+
+"""Fecha en formato JS"""
+scalar Date
+
+type Edge {
+  cursor: Cursor!
+  id: String!
+  node: Entity!
+}
+
+enum ElasticIndex {
+  ALL
+  APPS
+  BUILDS
+  RELEASES
+  ORGS
+  ARTIFACTS
+  ACCOUNTS
+  DOCKERFILES
+  DEPLOYMENTS
+  CHANNELS
+  ENVIRONMENTS
+  IMPLEMENTATIONS
+  KUBERNETES
+  SITES
+  POSTS
+  CHATS
+  PROJECTS
+}
+
+type EntitiesConnection {
+  edges: [Edge]
+  pageInfo: PageInfo
+}
+
+union Entity = Org | User | Chat | AIProject
+
+input FilterInput {
+  property: String!
+  type: String!
+  value: String
+  valueNumber: Float
+  valueBoolean: Boolean
+  gt: Float
+  lte: Float
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NONBINARY
+  TRANSGENDERMALE
+  TRANSGENDERFEMALE
+  QUEER
+  OTHER
+}
+
+type GitBranch {
+  id: ID!
+  name: String!
+  url: String!
+  sha: String!
+  shortSha: String!
+}
+
+enum GitProvider {
+  GITHUB
+  GITLAB
+}
+
+type GitRepo {
+  id: ID!
+  name: String!
+  url: String!
+  ownerAvatar: String
+}
+
+type GitTag {
+  id: ID!
+  name: String!
+  url: String!
+  sha: String!
+  shortSha: String!
+}
+
+type GitValidation {
+  provider: GitProvider!
+  available: Boolean!
+}
+
+type Image {
+  id: ID!
+  ref: String!
+  url: String!
+  alt: String
+  width: Float!
+  height: Float!
+  blur: Float!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  signup(input: SignupInput!): ID
+  login(input: LoginInput!): ID
+  logout: ID
+  saveGithubToken(code: String!): Boolean!
+  githubOauth(code: String!): ID
+  recoverPassword(email: String!): Boolean
+  resetPassword(email: String!, password: String!, confirmPassword: String!, otp: String!, state: String!): Boolean
+  promptToSerpaCloudAI(message: String!, conversation: ID!, services: [String]!): AIMessageEdge
+  createChat(projectId: ID!): Chat!
+  createAIProject: AIProject!
+  updateProjectSummary(id: ID!, title: String!, summary: String!, summaryState: String!): AIProject!
+}
+
+interface NamespaceNode {
+  id: ID!
+  createdBy: User
+  createdAt: Date!
+  createdAtFormatted: String!
+}
+
+interface Node {
+  id: ID!
+  createdBy: User
+  createdAt: Date!
+  createdAtFormatted: String!
+}
+
+type Org implements Node & NamespaceNode {
+  id: ID!
+  createdBy: User!
+  createdAt: Date!
+  createdAtFormatted: String!
+  name: String!
+  description: String
+  key: String!
+  namespaceRef: String!
+  media(width: Int = 48, height: Int = 48, blur: Int = 0, fit: String = "cover", focus: Boolean = false): Image
+}
+
+type PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: Cursor
+  endCursor: Cursor
+  finalCursor: Cursor
+}
+
+enum Pronoun {
+  HE
+  SHE
+  THEY
+  OTHER
+}
+
+type Query {
+  node(id: ID!): Node
+  projectsTemplates: [AIProjectTemplate!]
+  conversation(after: Cursor, before: Cursor, first: Int, last: Int, conversation: String!): AIMessagesConnection
+  entities(index: ElasticIndex = ALL, after: Cursor, before: Cursor, first: Int, last: Int, query: QueryInput, sort: SortInput, filter: [FilterInput], filterMatrix: [[FilterInput]], orgIndex: Int): EntitiesConnection
+  me: User
+  currentTime: Date!
+  gitRepos(provider: GitProvider!): [GitRepo!]
+  gitBranchesByApp(appId: String!): [GitBranch!]
+  gitTagsByApp(appId: String!): [GitTag!]
+}
+
+input QueryInput {
+  value: String!
+  field: [String!]!
+}
+
+input SignupInput {
+  email: String!
+  password: String!
+  username: String!
+}
+
+input SortInput {
+  value: String!
+  property: String!
+}
+
+type Subscription {
+  gitValidation: GitValidation!
+  aiConversation(conversation: ID!): AIMessageEdge
+}
+
+enum UITheme {
+  DARK
+  LIGHT
+}
+
+type User implements Node & NamespaceNode {
+  id: ID!
+  username: String!
+  namespaceRef: String!
+  owned: Boolean!
+  uiTheme: UITheme
+  description: String!
+  createdBy: User!
+  createdAt: Date!
+  createdAtFormatted: String!
+  name: String
+  lastname: String
+  fullname: String
+  email: String!
+  gender: Gender
+  pronoun: Pronoun
+  birthday: Date
+  birthdayFormatted: String
+  age: String
+  media(width: Int = 48, height: Int = 48, blur: Int = 0, fit: String = "cover", focus: Boolean = false): Image
+  cover(width: Int = 48, height: Int = 48, blur: Int = 0, fit: String = "cover", focus: Boolean = false): Image
+  canFetchFromGithub: Boolean!
+}
+
